@@ -1,0 +1,45 @@
+{
+  "partitionToWriteStats" : {
+    "2" : [ {
+      "fileId" : "b2cc23ea-1b60-44c6-8660-8cf69c7aae62-0",
+      "path" : "2/.b2cc23ea-1b60-44c6-8660-8cf69c7aae62-0_20230619151759922.log.1_0-190-389",
+      "cdcStats" : null,
+      "prevCommit" : "20230619151759922",
+      "numWrites" : 1,
+      "numDeletes" : 0,
+      "numUpdateWrites" : 1,
+      "numInserts" : 0,
+      "totalWriteBytes" : 986,
+      "totalWriteErrors" : 0,
+      "tempPath" : null,
+      "partitionPath" : "2",
+      "totalLogRecords" : 0,
+      "totalLogFilesCompacted" : 0,
+      "totalLogSizeCompacted" : 0,
+      "totalUpdatedRecordsCompacted" : 0,
+      "totalLogBlocks" : 0,
+      "totalCorruptLogBlock" : 0,
+      "totalRollbackBlocks" : 0,
+      "fileSizeInBytes" : 986,
+      "minEventTime" : null,
+      "maxEventTime" : null,
+      "runtimeStats" : {
+        "totalScanTime" : 0,
+        "totalUpsertTime" : 71,
+        "totalCreateTime" : 0
+      },
+      "logVersion" : 1,
+      "logOffset" : 0,
+      "baseFile" : "b2cc23ea-1b60-44c6-8660-8cf69c7aae62-0_0-163-332_20230619151759922.parquet",
+      "logFiles" : [ ".b2cc23ea-1b60-44c6-8660-8cf69c7aae62-0_20230619151759922.log.1_0-190-389" ],
+      "recordsStats" : {
+        "val" : null
+      }
+    } ]
+  },
+  "compacted" : false,
+  "extraMetadata" : {
+    "schema" : "{\"type\":\"record\",\"name\":\"hudi_mor_record\",\"namespace\":\"hoodie.hudi_mor\",\"fields\":[{\"name\":\"id\",\"type\":[\"null\",\"string\"],\"default\":null},{\"name\":\"value\",\"type\":[\"null\",\"string\"],\"default\":null},{\"name\":\"timestamp\",\"type\":[\"null\",\"int\"],\"default\":null},{\"name\":\"partition\",\"type\":[\"null\",\"string\"],\"default\":null}]}"
+  },
+  "operationType" : "UPSERT"
+}

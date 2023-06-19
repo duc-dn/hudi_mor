@@ -1,0 +1,88 @@
+version: '3'
+
+services:
+  spark-master:
+     image: ducdn01/cluster-apache-spark:3.1.1  # docker build -t ducdn01/cluster-apache-spark ./Dockerfiles/spark
+     container_name: master
+     ports:
+       - "9090:8080"
+       - "7077:7077"
+     volumes:
+       - ./docker-config/spark/workspace:/opt/workspace
+       - ./docker-config/spark/conf/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
+     env_file:
+       - ./docker-config/spark/conf/spark-config.env
+     environment:
+       - SPARK_LOCAL_IP=spark-master
+       - SPARK_WORKLOAD=master
+       - PATH=/usr/local/openjdk-11/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/spark/bin:/opt/spark/sbin
+     networks:
+       - lakehouse
+
+  trino-coordinator:
+    image: 'trinodb/trino:latest'
+    hostname: trino-coordinator
+    container_name: trino
+    ports:
+      - '8080:8080'
+    volumes:
+      - ./docker-config/trino/etc:/etc/trino
+    networks:
+      - lakehouse
+
+  mariadb:
+    image: 'mariadb:latest'
+    hostname: mariadb
+    container_name: mariadb
+    ports:
+      - '3307:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_DATABASE: metastore_db
+    networks:
+      - lakehouse
+
+  hive-metastore:
+    image: 'bitsondatadev/hive-metastore:latest'
+    hostname: hive-metastore
+    container_name: hive-metastore
+    ports:
+      - '9083:9083' # Metastore Thrift
+    volumes:
+      - ./docker-config/hive/metastore-site.xml:/opt/apache-hive-metastore-3.0.0-bin/conf/metastore-site.xml:ro
+    environment:
+      METASTORE_DB_HOSTNAME: mariadb
+    depends_on:
+      - mariadb
+    networks:
+      - lakehouse
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.0.1
+    user: "0:0"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    volumes:
+    - ./storage/zoo:/var/lib/zookeeper
+    ports:
+      - '2181:2181'
+    networks:
+      - lakehouse
+  minio:
+    image: 'quay.io/minio/minio'
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    command: server /data --console-address ":9001"
+    networks:
+      - lakehouse
+
+networks:
+  lakehouse:
+    driver: bridge
+
