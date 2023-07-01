@@ -1,6 +1,0 @@
-{
-  "partitionToWriteStats" : { },
-  "compacted" : false,
-  "extraMetadata" : { },
-  "operationType" : "UPSERT_PREPPED"
-}
